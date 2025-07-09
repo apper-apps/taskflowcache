@@ -1,9 +1,9 @@
-import { motion, AnimatePresence } from "framer-motion";
-import TaskCard from "@/components/molecules/TaskCard";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
+import { AnimatePresence, motion } from "framer-motion";
+import React from "react";
 import Empty from "@/components/ui/Empty";
-
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import TaskCard from "@/components/molecules/TaskCard";
 const TaskList = ({ 
   tasks, 
   categories, 
@@ -13,7 +13,9 @@ const TaskList = ({
   onEdit, 
   onDelete, 
   onRetry,
-  emptyType = "tasks"
+  emptyType = "tasks",
+  onSelectionChange,
+  selectedTasks = []
 }) => {
   if (loading) {
     return <Loading type="tasks" />;
@@ -42,6 +44,8 @@ const TaskList = ({
             onToggle={onToggle}
             onEdit={onEdit}
             onDelete={onDelete}
+            onSelectionChange={onSelectionChange}
+            isSelected={selectedTasks?.includes(task.Id)}
           />
         ))}
       </AnimatePresence>

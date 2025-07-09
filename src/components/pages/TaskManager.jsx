@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import QuickAddTask from "@/components/molecules/QuickAddTask";
-import TaskFilters from "@/components/molecules/TaskFilters";
-import TaskStats from "@/components/organisms/TaskStats";
 import TaskList from "@/components/organisms/TaskList";
-import Loading from "@/components/ui/Loading";
+import TaskStats from "@/components/organisms/TaskStats";
 import Error from "@/components/ui/Error";
-import { taskService } from "@/services/api/taskService";
+import Loading from "@/components/ui/Loading";
+import TaskFilters from "@/components/molecules/TaskFilters";
+import QuickAddTask from "@/components/molecules/QuickAddTask";
 import { categoryService } from "@/services/api/categoryService";
+import { taskService } from "@/services/api/taskService";
 
 const TaskManager = () => {
   const { categoryId } = useParams();
@@ -18,6 +18,7 @@ const TaskManager = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedTasks, setSelectedTasks] = useState([]);
   const [filters, setFilters] = useState({
     status: "all",
     priority: "",
@@ -94,6 +95,47 @@ const TaskManager = () => {
     } catch (err) {
       toast.error("Failed to update task");
     }
+};
+
+  const handleBulkComplete = async () => {
+    if (selectedTasks.length === 0) return;
+    
+    try {
+      const incompleteTasks = selectedTasks.filter(taskId => {
+        const task = tasks.find(t => t.Id === taskId);
+        return task && !task.completed;
+      });
+      
+      if (incompleteTasks.length === 0) {
+        toast.info("All selected tasks are already completed");
+        return;
+      }
+      
+      // Update all selected incomplete tasks
+      const updatePromises = incompleteTasks.map(taskId => 
+        taskService.update(taskId, { completed: true })
+      );
+      
+      await Promise.all(updatePromises);
+      
+      // Update local state
+      setTasks(prev => prev.map(task => 
+        incompleteTasks.includes(task.Id) 
+          ? { ...task, completed: true, completedAt: new Date().toISOString() }
+          : task
+      ));
+      
+      // Clear selection
+      setSelectedTasks([]);
+      
+      // Update stats
+      const updatedStats = await taskService.getStats();
+      setStats(updatedStats);
+      
+      toast.success(`${incompleteTasks.length} task${incompleteTasks.length > 1 ? 's' : ''} marked as complete!`);
+    } catch (err) {
+      toast.error("Failed to complete selected tasks");
+    }
   };
 
   const handleEditTask = async (task) => {
@@ -126,6 +168,27 @@ const TaskManager = () => {
 
   const handleClearSearch = () => {
     setFilters(prev => ({ ...prev, search: "" }));
+};
+
+  const handleTaskSelection = (taskId, isSelected) => {
+    setSelectedTasks(prev => 
+      isSelected 
+        ? [...prev, taskId]
+        : prev.filter(id => id !== taskId)
+    );
+  };
+
+  const handleSelectAll = () => {
+    const filteredTaskIds = filteredTasks.map(t => t.Id);
+    setSelectedTasks(prev => 
+      prev.length === filteredTaskIds.length 
+        ? [] 
+        : filteredTaskIds
+    );
+  };
+
+  const handleClearSelection = () => {
+    setSelectedTasks([]);
   };
 
   const getFilteredTasks = () => {
@@ -190,8 +253,39 @@ const TaskManager = () => {
         onClearSearch={handleClearSearch}
         categories={categories}
       />
+/>
 
-      <TaskList
+      {selectedTasks.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-4"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-primary font-medium">
+                {selectedTasks.length} task{selectedTasks.length > 1 ? 's' : ''} selected
+              </span>
+              <button
+                onClick={handleClearSelection}
+                className="text-gray-500 hover:text-gray-700 text-sm"
+              >
+                Clear selection
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleBulkComplete}
+                className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                Mark selected complete
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+<TaskList
         tasks={filteredTasks}
         categories={categories}
         onToggle={handleToggleTask}
@@ -199,6 +293,9 @@ const TaskManager = () => {
         onDelete={handleDeleteTask}
         onRetry={loadData}
         emptyType={filters.search ? "search" : categoryId ? "category" : "tasks"}
+        onSelectionChange={handleTaskSelection}
+        selectedTasks={selectedTasks}
+        onSelectAll={handleSelectAll}
       />
     </div>
   );

@@ -154,6 +154,57 @@ body {
   transform: rotate(45deg);
 }
 
+/* Selection checkbox styles */
+.selection-checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.selection-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  cursor: pointer;
+}
+
+.selection-checkbox .selection-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.selection-checkbox:hover .selection-checkmark {
+  border-color: #5B21B6;
+}
+
+.selection-checkbox input[type="checkbox"]:checked + .selection-checkmark {
+  background: linear-gradient(135deg, #5B21B6 0%, #8B5CF6 100%);
+  border-color: #5B21B6;
+  transform: scale(1.1);
+}
+
+.selection-checkbox input[type="checkbox"]:checked + .selection-checkmark:after {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 /* Priority indicators */
 .priority-high {
   border-left: 4px solid #EF4444;

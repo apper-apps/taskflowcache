@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Badge from "@/components/atoms/Badge";
 
-const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [] }) => {
+const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelectionChange, isSelected }) => {
   const category = categories.find(c => c.Id === task.categoryId);
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
 
@@ -43,7 +43,19 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [] }) => {
       whileHover={{ y: -2 }}
       layout
     >
-      <div className="flex items-start gap-4">
+<div className="flex items-start gap-4">
+        {onSelectionChange && (
+          <div className="selection-checkbox">
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => onSelectionChange(task.Id, e.target.checked)}
+              className="cursor-pointer"
+            />
+            <div className="selection-checkmark"></div>
+          </div>
+        )}
+        
         <div className="task-checkbox">
           <input
             type="checkbox"
