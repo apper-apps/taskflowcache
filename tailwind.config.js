@@ -1,20 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
+extend: {
       colors: {
-        primary: "#5B21B6",
-        secondary: "#8B5CF6",
+        primary: "var(--accent-primary)",
+        secondary: "var(--accent-secondary)",
         accent: "#10B981",
-        surface: "#F9FAFB",
+        surface: "var(--bg-secondary)",
         success: "#10B981",
         warning: "#F59E0B",
         error: "#EF4444",
         info: "#3B82F6",
+        'bg-primary': "var(--bg-primary)",
+        'bg-secondary': "var(--bg-secondary)",
+        'text-primary': "var(--text-primary)",
+        'text-secondary': "var(--text-secondary)",
+        'border-color': "var(--border-color)",
       },
       fontFamily: {
         display: ["Plus Jakarta Sans", "sans-serif"],

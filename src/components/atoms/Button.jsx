@@ -10,13 +10,13 @@ const Button = forwardRef(({
   disabled = false,
   ...props 
 }, ref) => {
-  const variants = {
+const variants = {
     default: "bg-gradient-to-r from-primary to-secondary text-white hover:shadow-lg hover:scale-105",
-    secondary: "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-900 hover:from-gray-200 hover:to-gray-300",
+    secondary: "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-900 dark:text-white hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500",
     success: "bg-gradient-to-r from-accent to-green-500 text-white hover:shadow-lg hover:scale-105",
     danger: "bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-lg hover:scale-105",
     outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
-    ghost: "text-gray-700 hover:bg-gray-100",
+    ghost: "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800",
   };
 
   const sizes = {
