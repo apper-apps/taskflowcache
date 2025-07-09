@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Badge from "@/components/atoms/Badge";
-
+import { formatDuration, getTotalTaskDuration } from "@/utils/taskUtils";
 const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelectionChange, isSelected, onStartTimer, onStopTimer }) => {
   const category = categories.find(c => c.Id === task.categoryId);
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
@@ -131,10 +131,7 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelecti
             <div className="flex items-center gap-2">
               <ApperIcon name="Clock" size={14} className="text-gray-500" />
               <span className="text-sm text-gray-600">
-                {(() => {
-                  const { formatDuration, getTotalTaskDuration } = require("@/utils/taskUtils");
-                  return formatDuration(getTotalTaskDuration(task));
-                })()}
+{formatDuration(getTotalTaskDuration(task))}
               </span>
               {task.activeTimer && task.activeTimer.isActive && (
                 <div className="flex items-center gap-1 text-xs text-accent">
