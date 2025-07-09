@@ -106,3 +106,93 @@ export const validateTask = (task) => {
     errors
   };
 };
+
+// Recurring task utilities
+export const generateRecurringInstances = (template, startDate, endDate) => {
+  const instances = [];
+  const { interval, frequency, exceptions = [] } = template.recurringConfig;
+  
+  let currentDate = new Date(startDate);
+  const finalDate = new Date(endDate);
+  
+  while (currentDate <= finalDate) {
+    const dateString = currentDate.toISOString().split('T')[0];
+    
+    // Skip if this date is in exceptions
+    if (!exceptions.includes(dateString)) {
+      const instance = {
+        ...template,
+        Id: undefined, // Will be assigned by service
+        title: template.title,
+        description: template.description,
+        templateId: template.Id,
+        isRecurring: true,
+        dueDate: new Date(currentDate).toISOString(),
+        createdAt: new Date().toISOString(),
+        completed: false,
+        completedAt: null
+      };
+      instances.push(instance);
+    }
+    
+    // Calculate next occurrence
+    currentDate = calculateNextOccurrence(currentDate, interval, frequency);
+  }
+  
+  return instances;
+};
+
+export const calculateNextOccurrence = (currentDate, interval, frequency) => {
+  const nextDate = new Date(currentDate);
+  
+  switch (interval) {
+    case 'daily':
+      nextDate.setDate(nextDate.getDate() + frequency);
+      break;
+    case 'weekly':
+      nextDate.setDate(nextDate.getDate() + (frequency * 7));
+      break;
+    case 'monthly':
+      nextDate.setMonth(nextDate.getMonth() + frequency);
+      break;
+    default:
+      nextDate.setDate(nextDate.getDate() + 1);
+  }
+  
+  return nextDate;
+};
+
+export const isValidRecurringConfig = (config) => {
+  if (!config || typeof config !== 'object') return false;
+  
+  const { interval, frequency } = config;
+  
+  if (!['daily', 'weekly', 'monthly'].includes(interval)) return false;
+  if (!Number.isInteger(frequency) || frequency < 1) return false;
+  
+  return true;
+};
+
+export const generateTemplateInstances = (template, options = {}) => {
+  const {
+    startDate = new Date(),
+    daysAhead = 30
+  } = options;
+  
+  const endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + daysAhead);
+  
+  return generateRecurringInstances(template, startDate, endDate);
+};
+
+export const getRecurringTaskStats = (tasks) => {
+  const recurringTasks = tasks.filter(t => t.isRecurring);
+  const templates = tasks.filter(t => t.isTemplate);
+  
+  return {
+    totalRecurring: recurringTasks.length,
+    totalTemplates: templates.length,
+    completedRecurring: recurringTasks.filter(t => t.completed).length,
+    activeTemplates: templates.filter(t => !t.archived).length
+  };
+};

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import FormField from "@/components/molecules/FormField";
-import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import FormField from "@/components/molecules/FormField";
 
 const QuickAddTask = ({ onAdd, categories = [] }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -12,7 +12,12 @@ const QuickAddTask = ({ onAdd, categories = [] }) => {
     description: "",
     categoryId: "",
     priority: "medium",
-    dueDate: ""
+    dueDate: "",
+    isTemplate: false,
+    recurringConfig: {
+      interval: "day",
+      frequency: 1
+    }
   });
 
   const categoryOptions = [
@@ -24,6 +29,13 @@ const QuickAddTask = ({ onAdd, categories = [] }) => {
     { value: "low", label: "Low" },
     { value: "medium", label: "Medium" },
     { value: "high", label: "High" }
+];
+
+  const intervalOptions = [
+    { value: "day", label: "Day(s)" },
+    { value: "week", label: "Week(s)" },
+    { value: "month", label: "Month(s)" },
+    { value: "year", label: "Year(s)" }
   ];
 
   const handleSubmit = async (e) => {
@@ -43,13 +55,18 @@ const QuickAddTask = ({ onAdd, categories = [] }) => {
 
       await onAdd(taskData);
       
-      // Reset form
+// Reset form
       setFormData({
         title: "",
         description: "",
         categoryId: "",
         priority: "medium",
-        dueDate: ""
+        dueDate: "",
+        isTemplate: false,
+        recurringConfig: {
+          interval: "day",
+          frequency: 1
+        }
       });
       setIsExpanded(false);
       
@@ -141,9 +158,50 @@ const QuickAddTask = ({ onAdd, categories = [] }) => {
               type="datetime-local"
               label="Due Date"
               name="dueDate"
-              value={formData.dueDate}
+value={formData.dueDate}
               onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
             />
+            
+            <div className="col-span-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={formData.isTemplate}
+                  onChange={(e) => setFormData({ ...formData, isTemplate: e.target.checked })}
+                  className="rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                Create as recurring template
+              </label>
+            </div>
+            
+            {formData.isTemplate && (
+              <>
+                <FormField
+                  type="select"
+                  label="Repeat Every"
+                  name="interval"
+                  value={formData.recurringConfig.interval}
+                  onChange={(e) => setFormData({ 
+                    ...formData, 
+                    recurringConfig: { ...formData.recurringConfig, interval: e.target.value }
+                  })}
+                  options={intervalOptions}
+                />
+                
+                <FormField
+                  type="number"
+                  label="Frequency"
+                  name="frequency"
+                  value={formData.recurringConfig.frequency}
+                  onChange={(e) => setFormData({ 
+                    ...formData, 
+                    recurringConfig: { ...formData.recurringConfig, frequency: parseInt(e.target.value) || 1 }
+                  })}
+                  min="1"
+                  placeholder="1"
+                />
+              </>
+            )}
           </motion.div>
         )}
       </form>
