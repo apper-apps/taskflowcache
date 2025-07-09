@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Badge from "@/components/atoms/Badge";
 
-const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelectionChange, isSelected }) => {
+const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelectionChange, isSelected, onStartTimer, onStopTimer }) => {
   const category = categories.find(c => c.Id === task.categoryId);
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
 
@@ -99,7 +99,7 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelecti
             </p>
           )}
 
-          <div className="flex items-center gap-4 mt-4">
+<div className="flex items-center gap-4 mt-4">
             {category && (
               <Badge
                 variant="outline"
@@ -124,6 +124,46 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categories = [], onSelecti
                 )}
               </div>
             )}
+          </div>
+
+          {/* Time Tracking Section */}
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+            <div className="flex items-center gap-2">
+              <ApperIcon name="Clock" size={14} className="text-gray-500" />
+              <span className="text-sm text-gray-600">
+                {(() => {
+                  const { formatDuration, getTotalTaskDuration } = require("@/utils/taskUtils");
+                  return formatDuration(getTotalTaskDuration(task));
+                })()}
+              </span>
+              {task.activeTimer && task.activeTimer.isActive && (
+                <div className="flex items-center gap-1 text-xs text-accent">
+                  <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                  Active
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              {task.activeTimer && task.activeTimer.isActive ? (
+                <button
+                  onClick={() => onStopTimer && onStopTimer(task.Id)}
+                  className="timer-btn timer-btn-stop"
+                  title="Stop Timer"
+                >
+                  <ApperIcon name="Square" size={14} />
+                </button>
+              ) : (
+                <button
+                  onClick={() => onStartTimer && onStartTimer(task.Id)}
+                  className="timer-btn timer-btn-start"
+                  title="Start Timer"
+                  disabled={task.completed}
+                >
+                  <ApperIcon name="Play" size={14} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

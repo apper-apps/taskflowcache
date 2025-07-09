@@ -196,3 +196,82 @@ export const getRecurringTaskStats = (tasks) => {
     activeTemplates: templates.filter(t => !t.archived).length
   };
 };
+
+// Time tracking utilities
+export const formatDuration = (totalSeconds) => {
+  if (!totalSeconds || totalSeconds < 0) return "0m";
+  
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  } else if (minutes > 0) {
+    return `${minutes}m`;
+  } else {
+    return `${seconds}s`;
+  }
+};
+
+export const startTimer = (task) => {
+  const now = new Date().toISOString();
+  return {
+    ...task,
+    activeTimer: {
+      startTime: now,
+      isActive: true
+    }
+  };
+};
+
+export const stopTimer = (task) => {
+  if (!task.activeTimer || !task.activeTimer.isActive) {
+    return task;
+  }
+  
+  const endTime = new Date().toISOString();
+  const sessionDuration = calculateDuration(task.activeTimer.startTime, endTime);
+  
+  const newTimerEntry = {
+    id: Date.now(),
+    startTime: task.activeTimer.startTime,
+    endTime: endTime,
+    duration: sessionDuration
+  };
+  
+  return {
+    ...task,
+    activeTimer: {
+      startTime: null,
+      isActive: false
+    },
+    totalDuration: (task.totalDuration || 0) + sessionDuration,
+    timerEntries: [...(task.timerEntries || []), newTimerEntry]
+  };
+};
+
+export const calculateDuration = (startTime, endTime) => {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  return Math.floor((end - start) / 1000); // Return duration in seconds
+};
+
+export const getCurrentSessionDuration = (task) => {
+  if (!task.activeTimer || !task.activeTimer.isActive) {
+    return 0;
+  }
+  
+  const now = new Date().toISOString();
+  return calculateDuration(task.activeTimer.startTime, now);
+};
+
+export const getTotalTaskDuration = (task) => {
+  let total = task.totalDuration || 0;
+  
+  // Add current session duration if timer is active
+  if (task.activeTimer && task.activeTimer.isActive) {
+    total += getCurrentSessionDuration(task);
+  }
+return total;
+};

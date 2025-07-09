@@ -6,10 +6,16 @@
     "categoryId": 1,
     "priority": "high",
     "dueDate": "2024-01-15T09:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T08:00:00Z",
-    "order": 1
+    "order": 1,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 2,
@@ -18,10 +24,16 @@
     "categoryId": 1,
     "priority": "medium",
     "dueDate": "2024-01-12T14:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T09:00:00Z",
-    "order": 2
+    "order": 2,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 3,
@@ -30,10 +42,16 @@
     "categoryId": 1,
     "priority": "medium",
     "dueDate": "2024-01-13T16:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T10:00:00Z",
-    "order": 3
+    "order": 3,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 4,
@@ -42,10 +60,16 @@
     "categoryId": 1,
     "priority": "low",
     "dueDate": "2024-01-20T17:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T11:00:00Z",
-    "order": 4
+    "order": 4,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 5,
@@ -54,10 +78,16 @@
     "categoryId": 2,
     "priority": "medium",
     "dueDate": "2024-01-13T18:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T12:00:00Z",
-    "order": 5
+    "order": 5,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 6,
@@ -66,10 +96,16 @@
     "categoryId": 3,
     "priority": "high",
     "dueDate": "2024-01-12T10:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T13:00:00Z",
-    "order": 6
+    "order": 6,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 7,
@@ -78,10 +114,16 @@
     "categoryId": 4,
     "priority": "medium",
     "dueDate": "2024-01-18T20:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T14:00:00Z",
-    "order": 7
+    "order": 7,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 8,
@@ -90,10 +132,16 @@
     "categoryId": 5,
     "priority": "high",
     "dueDate": "2024-01-15T23:59:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T15:00:00Z",
-    "order": 8
+    "order": 8,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 9,
@@ -102,10 +150,16 @@
     "categoryId": 6,
     "priority": "low",
     "dueDate": "2024-01-16T12:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T16:00:00Z",
-    "order": 9
+    "order": 9,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 10,
@@ -114,10 +168,23 @@
     "categoryId": 3,
     "priority": "medium",
     "dueDate": "2024-01-12T07:00:00Z",
-    "completed": true,
+"completed": true,
     "completedAt": "2024-01-11T07:30:00Z",
     "createdAt": "2024-01-10T17:00:00Z",
-    "order": 10
+    "order": 10,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 1800,
+    "timerEntries": [
+      {
+        "id": 1641891000000,
+        "startTime": "2024-01-11T07:00:00Z",
+        "endTime": "2024-01-11T07:30:00Z",
+        "duration": 1800
+      }
+    ]
   },
   {
     "Id": 11,
@@ -126,10 +193,16 @@
     "categoryId": 2,
     "priority": "low",
     "dueDate": "2024-01-14T20:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T18:00:00Z",
-    "order": 11
+    "order": 11,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 12,
@@ -138,10 +211,16 @@
     "categoryId": 6,
     "priority": "high",
     "dueDate": "2024-01-13T15:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
-"createdAt": "2024-01-10T19:00:00Z",
-    "order": 12
+    "createdAt": "2024-01-10T19:00:00Z",
+    "order": 12,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": []
   },
   {
     "Id": 13,
@@ -150,10 +229,16 @@
     "categoryId": 1,
     "priority": "medium",
     "dueDate": "2024-01-11T09:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T20:00:00Z",
     "order": 13,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": [],
     "isTemplate": true,
     "isRecurring": true,
     "recurringConfig": {
@@ -169,10 +254,16 @@
     "categoryId": 2,
     "priority": "medium",
     "dueDate": "2024-01-14T10:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T21:00:00Z",
     "order": 14,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": [],
     "isTemplate": true,
     "isRecurring": true,
     "recurringConfig": {
@@ -188,10 +279,16 @@
     "categoryId": 5,
     "priority": "high",
     "dueDate": "2024-01-31T18:00:00Z",
-    "completed": false,
+"completed": false,
     "completedAt": null,
     "createdAt": "2024-01-10T22:00:00Z",
     "order": 15,
+    "activeTimer": {
+      "startTime": null,
+      "isActive": false
+    },
+    "totalDuration": 0,
+    "timerEntries": [],
     "isTemplate": true,
     "isRecurring": true,
     "recurringConfig": {

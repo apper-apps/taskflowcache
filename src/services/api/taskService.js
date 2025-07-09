@@ -40,7 +40,7 @@ export const taskService = {
     return { ...newTask };
   },
 
-  async update(id, updates) {
+async update(id, updates) {
     await delay(350);
     const taskIndex = tasks.findIndex(t => t.Id === parseInt(id));
     if (taskIndex === -1) {
@@ -55,6 +55,15 @@ export const taskService = {
     // Handle completion status
     if (updates.completed !== undefined) {
       updatedTask.completedAt = updates.completed ? new Date().toISOString() : null;
+      
+      // Stop timer if task is completed
+      if (updates.completed && updatedTask.activeTimer && updatedTask.activeTimer.isActive) {
+        const { stopTimer } = await import("@/utils/taskUtils");
+        const stoppedTask = stopTimer(updatedTask);
+        updatedTask.activeTimer = stoppedTask.activeTimer;
+        updatedTask.totalDuration = stoppedTask.totalDuration;
+        updatedTask.timerEntries = stoppedTask.timerEntries;
+      }
     }
 
     tasks[taskIndex] = updatedTask;

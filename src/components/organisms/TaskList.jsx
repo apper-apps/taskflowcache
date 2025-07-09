@@ -15,7 +15,9 @@ const TaskList = ({
   onRetry,
   emptyType = "tasks",
   onSelectionChange,
-  selectedTasks = []
+  selectedTasks = [],
+  onStartTimer,
+  onStopTimer
 }) => {
   if (loading) {
     return <Loading type="tasks" />;
@@ -37,7 +39,7 @@ const TaskList = ({
     >
       <AnimatePresence mode="popLayout">
         {tasks.map((task) => (
-          <TaskCard
+<TaskCard
             key={task.Id}
             task={task}
             categories={categories}
@@ -46,6 +48,8 @@ const TaskList = ({
             onDelete={onDelete}
             onSelectionChange={onSelectionChange}
             isSelected={selectedTasks?.includes(task.Id)}
+            onStartTimer={onStartTimer}
+            onStopTimer={onStopTimer}
           />
         ))}
       </AnimatePresence>

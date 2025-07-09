@@ -71,8 +71,7 @@ const TaskManager = () => {
       throw err;
     }
   };
-
-  const handleToggleTask = async (taskId) => {
+const handleToggleTask = async (taskId) => {
     try {
       const task = tasks.find(t => t.Id === taskId);
       if (!task) return;
@@ -95,7 +94,53 @@ const TaskManager = () => {
     } catch (err) {
       toast.error("Failed to update task");
     }
-};
+  };
+
+  const handleStartTimer = async (taskId) => {
+    try {
+      const task = tasks.find(t => t.Id === taskId);
+      if (!task) return;
+
+      const { startTimer } = await import("@/utils/taskUtils");
+      const updatedTask = startTimer(task);
+
+      const savedTask = await taskService.update(taskId, {
+        activeTimer: updatedTask.activeTimer
+      });
+
+      setTasks(prev => prev.map(t => 
+        t.Id === taskId ? savedTask : t
+      ));
+
+      toast.success("Timer started!");
+    } catch (err) {
+      toast.error("Failed to start timer");
+    }
+  };
+
+  const handleStopTimer = async (taskId) => {
+    try {
+      const task = tasks.find(t => t.Id === taskId);
+      if (!task) return;
+
+      const { stopTimer } = await import("@/utils/taskUtils");
+      const updatedTask = stopTimer(task);
+
+      const savedTask = await taskService.update(taskId, {
+        activeTimer: updatedTask.activeTimer,
+        totalDuration: updatedTask.totalDuration,
+        timerEntries: updatedTask.timerEntries
+      });
+
+      setTasks(prev => prev.map(t => 
+        t.Id === taskId ? savedTask : t
+      ));
+
+      toast.success("Timer stopped!");
+    } catch (err) {
+      toast.error("Failed to stop timer");
+    }
+  };
 
   const handleBulkComplete = async () => {
     if (selectedTasks.length === 0) return;
@@ -296,6 +341,8 @@ const TaskManager = () => {
         onSelectionChange={handleTaskSelection}
         selectedTasks={selectedTasks}
         onSelectAll={handleSelectAll}
+        onStartTimer={handleStartTimer}
+        onStopTimer={handleStopTimer}
       />
     </div>
   );
